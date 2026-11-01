@@ -1,0 +1,29 @@
+# 密钥与环境（防误提交，红线）
+.env
+.env.*
+*.pem
+*.key
+.credentials.yaml
+
+# PuTTY 日志与本地调试产物（可能含业务敏感信息）
+putty.log
+*.log
+
+# 安装脚本生成的备份
+*.bak
+*.bak.*
+
+# SVN 元数据
+.svn/
+
+# IDE / 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+_scratch/
+
+# 操作系统
+.DS_Store
+Thumbs.db
