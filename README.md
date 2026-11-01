@@ -90,7 +90,7 @@ powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.c
 
 脚本把技能包装到 `%USERPROFILE%\.dsh\skills\bastion-putty-window-log\`（若设置了 `DSH_HOME` 则用 `%DSH_HOME%\skills\`）。
 DeepSeek Harness 实时监听该目录，**安装后无需重启**：在对话里输入 `/bastion-putty-window-log` 唤起即可。
-已有旧安装会先被改名为 `bastion-putty-window-log.bak.<时间戳>`，不会静默覆盖。
+已有旧安装会先被移到 `%USERPROFILE%\.dsh\skills-backup\`（不留在 `skills\` 里，避免被当成第二个技能包），不会静默覆盖。
 
 ### 4.2 本地克隆安装（离线）
 

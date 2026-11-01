@@ -4,7 +4,8 @@
 #    %USERPROFILE%\.dsh\skills\bastion-putty-window-log
 #    (or %DSH_HOME%\skills\bastion-putty-window-log when DSH_HOME is set).
 #    DeepSeek Harness watches that directory, so no restart is needed.
-# 2. An existing installation is renamed to <target>.bak.<timestamp> first.
+# 2. An existing installation is moved to ..\skills-backup\ first, so the
+#    skills directory only ever holds loadable packages.
 #
 # Remote one-liner:
 #   powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/AFAP/plugin-bastion-putty-window-log/main/scripts/install.ps1 | iex"
@@ -92,13 +93,16 @@ if (-not $WhatIf -and -not (Test-Path (Join-Path $BundleSource "SKILL.md"))) {
 Write-Step "Installing skill to: $SkillTarget"
 if ($WhatIf) {
     Write-Warn2 "WhatIf: would copy $BundleSource -> $SkillTarget"
-    Write-Warn2 "WhatIf: an existing installation would be renamed to $SkillTarget.bak.<timestamp>"
+    Write-Warn2 "WhatIf: an existing installation would be moved to ..\skills-backup\$SkillName.bak.<timestamp>"
 } else {
     New-Item -ItemType Directory -Force -Path $SkillsRoot | Out-Null
     if (Test-Path $SkillTarget) {
-        $Backup = "$SkillTarget.bak." + (Get-Date -Format "yyyyMMddHHmmss")
+        # Keep backups outside the skills directory: DSH only scans skills\ for packages.
+        $BackupRoot = Join-Path (Split-Path $SkillsRoot -Parent) "skills-backup"
+        New-Item -ItemType Directory -Force -Path $BackupRoot | Out-Null
+        $Backup = Join-Path $BackupRoot ("$SkillName.bak." + (Get-Date -Format "yyyyMMddHHmmss"))
         Move-Item -LiteralPath $SkillTarget -Destination $Backup -Force
-        Write-Warn2 "Existing installation backed up to: $Backup"
+        Write-Warn2 "Existing installation moved to: $Backup"
     }
     Copy-Item -Path $BundleSource -Destination $SkillTarget -Recurse
     if (-not (Test-Path (Join-Path $SkillTarget "SKILL.md"))) {

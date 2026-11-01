@@ -92,8 +92,7 @@ powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.c
 The script installs the package into `%USERPROFILE%\.dsh\skills\bastion-putty-window-log\`
 (or `%DSH_HOME%\skills\` when `DSH_HOME` is set). DeepSeek Harness watches that directory, so
 **no restart is needed**: type `/bastion-putty-window-log` in a conversation.
-An existing installation is renamed to `bastion-putty-window-log.bak.<timestamp>` first — nothing is
-silently overwritten.
+An existing installation is moved to `%USERPROFILE%\.dsh\skills-backup\` first (never left inside `skills\`, so it cannot be picked up as a second package) — nothing is silently overwritten.
 
 ### 4.2 Install from a local clone (offline)
 
